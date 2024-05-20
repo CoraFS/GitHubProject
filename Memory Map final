@@ -1,0 +1,135 @@
+import random
+import requests
+{
+    "recommendations": [
+        "tushortz.pygame-snippets"
+    ]
+}
+pygame=("tushortz.pygame-snippets")
+
+#Option menu
+screen_height = 1000
+screen_width = 1000
+option_size = 200
+grid = 4
+white = (255, 255, 255)
+black = (0, 0, 0)
+option_width = 120
+option_height = 20
+
+#Start Game
+def screen(display):
+    screen = pygame.display.set_mode((screen_height, screen_width))
+def pygame(display):
+    pygame.display.set_caption,('Memory Map')
+
+#create randomized integers
+def int(Random):
+    int= Random.randint
+def int(Random):
+    Random.randint = requests.get(int)
+int = {}
+option_int=[int]
+blank_option=()
+
+#Create pairs and mix results
+option_int *= 2
+random.shuffle(option_int)
+card_state = [False] * (grid ** 2)
+
+#Selection process
+flipped_cards = []
+matched_pairs = 0
+moves = 0
+
+#Rectangle map
+def rectangle_map(point,rect):
+    x, y = point
+    sx, sy, sw, sh = rect
+    return sx < x < sx + sw and sy < y < sy + sh
+
+#Renew code
+def renew_code():
+    renew_code_rect = (screen_width - option_width -
+                           20, 20, option_width, option_height)
+    pygame.draw.rect(screen, white, renew_code_rect)
+    # Specify text color (black)
+    restart = print ('Better Luck Next Time', True, (0, 0, 0))
+    text_rect = restart.get_rect(center=(
+        renew_code_rect[0] + option_width / 2, renew_code_rect[1] + option_height / 2))
+    screen.blit(restart, text_rect)
+
+#Create Display
+def display(message):
+    message_text = (message, True, black)
+    text_rect = message_text.get_rect(
+        center=(screen_width // 2, screen_height // 2))
+    screen.blit(message_text, text_rect)
+
+
+#Code loop for main game function
+running = True
+while running:
+ def event(function):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.clicked:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            restart_button_rect = (
+                screen_width - option_width - 20, 20, option_width, option_height)
+            if rectangle_map((mouse_x, mouse_y), restart_button_rect):
+                random.shuffle(option_int)
+                card_state = [False] * (grid ** 2)
+                flipped_cards = []
+                matched_pairs = 0
+                moves = 0
+            else:
+                col = mouse_x // option_size
+                row = mouse_y // option_size
+                index = row * grid + col
+                if not card_state[index] and len(flipped_cards) < 2:
+                    card_state[index] = True
+                    flipped_cards.append(index)
+                    moves += 1
+
+    screen.fill(white)
+
+    # Draw grid of cards
+    for i in range(grid):
+        for j in range(grid):
+            index = i * grid + j
+            pygame.draw.rect(screen, white, (j * option_size,
+                                             i * option_size, option_size, option_size))
+            if card_state[index] or index in flipped_cards:
+                card = option_int[index]
+            else:
+                card = blank_option
+            card = pygame.transform.scale(card, (option_size - 8, option_size - 8))
+            screen.blit(card, (j * option_size + 4, i * option_size + 4))
+
+    moves_text = (f"Moves: {moves}", True, white)
+    screen.blit(moves_text, (10, 10))
+
+    #Begin again
+    renew_code()
+
+    #A match was found
+    if len(flipped_cards) == 2:
+        if option_int[flipped_cards[0]] == option_int[flipped_cards[1]]:
+            matched_pairs += 1
+            flipped_cards = []
+        else:
+            card_state[flipped_cards[0]] = False
+            card_state[flipped_cards[1]] = False
+            flipped_cards = []
+
+    # Game Over
+    if matched_pairs == grid ** 2 // 2:
+        display, print('Great Job!')
+        pygame.display.flip()
+        running = False
+
+pygame.display.flip()
+
+pygame.quit()
